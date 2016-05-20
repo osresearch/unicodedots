@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+# 2x8 pattern
+# 0x2800 + bits
+#  1   8
+#  2  16
+#  4  32
+# 64 128
+use warnings;
+use strict;
+use utf8;
+binmode(STDOUT, ":utf8");
+
+my @lookup = (
+	1, 8,
+	2, 16,
+	4, 32,
+	64, 128,
+);
+
+my @lines = map { chomp; $_ } <>;
+
+# find the longest line
+for(my $y = 0 ; $y < @lines ; $y += 4)
+{
+	my $max_x = 0;
+	for(my $y2 = 0 ; $y2 < 4 ; $y2++)
+	{
+		next if $y + $y2 >= @lines;
+		my $l = length $lines[$y+$y2];
+		$max_x = $l if $l > $max_x;
+	}
+
+	for(my $x = 0 ; $x < $max_x ; $x += 2)
+	{
+		my $bits = 0;
+		for(my $y2 = 0 ; $y2 < 4 ; $y2++)
+		{
+			next if $y + $y2 >= @lines;
+			my $line = $lines[$y + $y2];
+			my $len = length $line;
+
+			for(my $x2 = 0 ; $x2 < 2 ; $x2++)
+			{
+				last if $x + $x2 >= $len;
+
+				my $c = substr($line, $x+$x2, 1);
+
+				if ($c and $c ne ' ')
+				{
+					$bits |= $lookup[$y2*2 + $x2];
+				}
+			}
+		}
+
+		#printf " %02x", $bits;
+		print chr(0x2800 + $bits);
+	}
+
+	print "\n";
+}
