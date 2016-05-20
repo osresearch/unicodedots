@@ -17,7 +17,7 @@ my @lookup = (
 	64, 128,
 );
 
-my @lines = map { chomp; $_ } <>;
+my @lines = map { s/\s*$//msg; $_ } <>;
 
 # find the longest line
 for(my $y = 0 ; $y < @lines ; $y += 4)
