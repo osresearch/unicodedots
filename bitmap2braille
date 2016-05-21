@@ -56,5 +56,7 @@ for(my $y = 0 ; $y < @lines ; $y += 4)
 		print chr(0x2800 + $bits);
 	}
 
+	# include a place holder if the line is empty
+	print chr(0x2800) if $max_x == 0;
 	print "\n";
 }
