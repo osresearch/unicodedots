@@ -1,0 +1,44 @@
+# Read from stdin, post it to twitter.
+import random
+import re
+import tweepy
+import time
+import sys
+import json
+reload(sys)
+sys.setdefaultencoding('utf-8')
+from botomatic import TBot
+
+class PostBot(TBot):
+    debug_mode = False
+
+    def __init__(self):
+        handle = "PostBot"
+        super(PostBot, self).__init__(handle)
+
+    def run(self):
+	# Read 8 lines from stdin
+	reply_id = None
+
+	while True:
+		tweet = ''
+		for i in range(0,8):
+			tweet = tweet + sys.stdin.readline()
+
+		if tweet == '':
+			break
+
+		if reply_id is not None:
+			print reply_id
+		print " ---------\n"
+		print tweet
+		status = self.api.update_status(tweet, reply_id)
+		reply_id = status.id
+
+		time.sleep(5)
+
+	self.wrap_up()
+
+
+if __name__ == '__main__':
+    m = PostBot()
