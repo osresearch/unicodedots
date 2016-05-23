@@ -35,7 +35,7 @@ class PostBot(TBot):
 		status = self.api.update_status(tweet, reply_id)
 		reply_id = status.id
 
-		time.sleep(5)
+		time.sleep(60)
 
 	self.wrap_up()
 
